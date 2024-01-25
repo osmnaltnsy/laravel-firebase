@@ -15,17 +15,20 @@
               </tr>
             </thead>
             <tbody>
-                @foreach ($products as $key => $product)
-                <tr>
-                    <td>{{ $product['name'] }}</td>
-                    <td>{{ $product['price'] }}</td>
-                    <td><a href="{{ route('products.edit', $key) }}" class="btn btn-info">Düzenle</a>
-                        <form action="{{ route('products.destroy', $key) }}" method="POST">
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger">Sil</button></td>
-                        </form>
-                </tr>
-                @endforeach
+                @if ($products)
+                    @foreach ($products as $key => $product)
+                    <tr>
+                        <td>{{ $product['name'] }}</td>
+                        <td>{{ $product['price'] }}</td>
+                        <td><a href="{{ route('products.edit', $key) }}" class="btn btn-info">Düzenle</a>
+                            <form action="{{ route('products.destroy', $key) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Sil</button></td>
+                            </form>
+                    </tr>
+                    @endforeach
+                @endif
             </tbody>
           </table>
     </div>

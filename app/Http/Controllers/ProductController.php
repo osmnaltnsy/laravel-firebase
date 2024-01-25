@@ -51,9 +51,9 @@ class ProductController extends Controller
     }
 
     public function destroy($key) {
-        $s = $this->db->getReference('products/'. $key)->remove();
+        $this->db->getReference('products/'. $key)->remove();
 
-        dd($s);
+        return redirect()->back();
     }
 
 }
