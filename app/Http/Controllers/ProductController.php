@@ -7,8 +7,15 @@ use Firebase;
 
 class ProductController extends Controller
 {
+    private $db;
+    public function __construct() {
+        $this->db = Firebase::database();
+    }
+
     public function index() {
-        return view('products.index');
+        $products = $this->db->getReference('products')->getSnapShot()->getValue();
+
+        return view('products.index', compact('products'));
     }
 
     public function create() {
@@ -19,8 +26,34 @@ class ProductController extends Controller
         $name = $request->name;
         $price = $request->price;
 
-        $db = Firebase::database();
-        $db->getReference;
+        $product = [ 'name' => $name, 'price' => $price ];
+
+        $this->db->getReference('products')->push($product);
+
+        return redirect()->back();
+    }
+
+    public function edit($key) {
+        $product = $this->db->getReference('products/'. $key)->getSnapshot();
+
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(Request $request, $key) {
+        $name = $request->name;
+        $price = $request->price;
+
+        $product = [ 'name' => $name, 'price' => $price ];
+
+        $this->db->getReference('products/'. $key)->update($product);
+
+        return redirect()->back();
+    }
+
+    public function destroy($key) {
+        $s = $this->db->getReference('products/'. $key)->remove();
+
+        dd($s);
     }
 
 }
